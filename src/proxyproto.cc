@@ -105,7 +105,8 @@ static int DecodeV1(const char* data, size_t size, InetAddress* src,
                     InetAddress* dst) {
   const ProxyProtoHeader* hdr = reinterpret_cast<const ProxyProtoHeader*>(data);
 
-  char* end = static_cast<char*>(memchr(hdr->v1.line, '\r', size - 1));
+  char* end = const_cast<char*>(
+      reinterpret_cast<const char*>(memchr(hdr->v1.line, '\r', size - 1)));
   if (end == nullptr || end[1] != '\n') {
     return kWrongProtocol;
   }

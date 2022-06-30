@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.6)
 
 project(proxyproto-server)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror")
+
 # 检查c++编译器标志，设置c++11支持变量
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
