@@ -25,11 +25,13 @@ static int g_log_level = LOG_LEVEL_INFO;
 
 static const char* g_log_level_string[] = {"D", "I", "W", "E"};
 
+#ifndef NDEBUG
 static const char* GetBasename(const char* path) {
   char* p1 = strrchr(const_cast<char*>(path), '/');
   char* p2 = strrchr(const_cast<char*>(path), '\\');
   return p1 ? p1 + 1 : (p2 ? p2 + 1 : path);
 }
+#endif
 
 void SetLogLevel(int lv) {
   if (lv >= LOG_LEVEL_DEBUG && lv <= LOG_LEVEL_ERROR) {
