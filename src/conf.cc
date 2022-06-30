@@ -43,6 +43,7 @@ int ShowHelp(int argc, char** argv) {
   for (int i = 0; i < size; ++i) {
     fprintf(stdout, fmt, info[i].option, info[i].desc);
   }
+  return 0;
 }
 
 int LoadConf(int argc, char** argv, Conf* conf) {
