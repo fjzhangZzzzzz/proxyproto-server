@@ -1,8 +1,6 @@
 # proxyproto-server
 用于自测代理协议的 demo server
 
-## 使用方法
-
 ## 构建
 
 ### 要求
