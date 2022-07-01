@@ -214,7 +214,7 @@ void Server::HandleEvents(int events, void* userp) {
     if (iter != conns_.end()) {
       OnConnEvt(conn, events);
       if (conn->state == kDisconnected) {
-        LOGI("remove %s", conn->cname());
+        LOGI("del conn [%s]", conn->cname());
         Update(EPOLL_CTL_DEL, conn->sockfd, conn->watch_events, conn);
         conns_.erase(conn);
       }
@@ -250,7 +250,7 @@ void Server::OnNewConn(int events) {
 
       Update(EPOLL_CTL_ADD, sockfd, kReadEvent, conn.get());
 
-      LOGI("add new conn [%s]", conn->cname());
+      LOGI("add conn [%s]", conn->cname());
       conns_.insert(std::make_pair(conn.get(), std::move(conn)));
     } else {
       LOGE("accept err %s", strerror(errno));
