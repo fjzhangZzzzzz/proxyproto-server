@@ -129,7 +129,6 @@ static int DecodeV1(const char* data, size_t size, InetAddress* src,
   char* token;
   char* str = const_cast<char*>(hdr->v1.line);
   char* saveptr = nullptr;
-  unsigned char buf[sizeof(struct in6_addr)] = {0};
   for (int i = 1;; i++, str = nullptr) {
     token = strtok_r(str, " ", &saveptr);
     if (token == nullptr) {
@@ -156,30 +155,26 @@ static int DecodeV1(const char* data, size_t size, InetAddress* src,
 
         /* source address */
       case 3: {
+        int ret = 0;
         struct sockaddr* sa = reinterpret_cast<struct sockaddr*>(&src_addr);
-        if (inet_pton(sa->sa_family, token, buf) != 1) {
-          return kInvalidAddr;
-        }
         if (sa->sa_family == AF_INET) {
-          src_addr.v4.sin_addr.s_addr =
-              reinterpret_cast<struct in_addr*>(buf)->s_addr;
+          ret = inet_pton(AF_INET, token, &src_addr.v4.sin_addr.s_addr);
         } else if (sa->sa_family == AF_INET6) {
-          memcpy(&src_addr.v6.sin6_addr, buf, 16);
+          ret = inet_pton(AF_INET6, token, &src_addr.v6.sin6_addr);
         }
+        if (ret != 1) return kInvalidAddr;
       } break;
 
         /* destination address */
       case 4: {
-        struct sockaddr* sa = reinterpret_cast<struct sockaddr*>(&dst_addr);
-        if (inet_pton(sa->sa_family, token, buf) != 1) {
-          return kInvalidAddr;
-        }
+        int ret = 0;
+        struct sockaddr* sa = reinterpret_cast<struct sockaddr*>(&src_addr);
         if (sa->sa_family == AF_INET) {
-          dst_addr.v4.sin_addr.s_addr =
-              reinterpret_cast<struct in_addr*>(buf)->s_addr;
+          ret = inet_pton(AF_INET, token, &dst_addr.v4.sin_addr.s_addr);
         } else if (sa->sa_family == AF_INET6) {
-          memcpy(&dst_addr.v6.sin6_addr, buf, 16);
+          ret = inet_pton(AF_INET6, token, &dst_addr.v6.sin6_addr);
         }
+        if (ret != 1) return kInvalidAddr;
       } break;
 
         /* source port */
